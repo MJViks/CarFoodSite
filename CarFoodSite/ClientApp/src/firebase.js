@@ -1,4 +1,4 @@
-﻿import app from "firebase/app"
+﻿import firebase from "firebase/app"
 import "firebase/auth"
 import "firebase/database"
 
@@ -15,19 +15,17 @@ const config = {
 
 class Firebase {
     constructor() {
-        app.initializeApp(config);
-        this.auth = app.auth();
-        this.db = app.database();
+        firebase.initializeApp(config);
+        this.auth = firebase.auth();
+        this.db = firebase.database();
+        firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
     }
 
     login(email, password) {
-        return this.auth.setPersistence(app.auth.Auth.Persistence.LOCAL).then(() => {
-            
-            return this.auth.signInWithEmailAndPassword(email, password).then(() => {
-                return localStorage.setItem('authUser', this.getCurrentUsername());
+        return this.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
 
-            })
-                
+            this.auth.signInWithEmailAndPassword(email, password);
+
         });
          
     }
@@ -50,6 +48,17 @@ class Firebase {
     getCurrentUsername() {
         return this.auth.currentUser && this.auth.currentUser.displayName;
     } 
+
+    getStateuser(nameUser) {
+        return this.auth.onAuthStateChanged(user => {
+            if (user) {
+                console.log(user.displayName)
+               nameUser(user.displayName)
+            } else {
+                console.log("No Auth")
+            }
+        })
+    }
 
     
 }

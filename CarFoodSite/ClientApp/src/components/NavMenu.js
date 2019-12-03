@@ -12,16 +12,20 @@ export class NavMenu extends Component {
     constructor(props) {
         super(props);
 
+        firebase.getStateuser(this.setName);
+
         this.toggleNavbar = this.toggleNavbar.bind(this);
         this.toggleNavbarClose = this.toggleNavbarClose.bind(this);
         this.state = {
             collapsed: true,
             login: false,
             navWhite: false,
-            name: localStorage.getItem('authUser')
+            name: null
+                //localStorage.getItem('authUser')
+            //localStorage.setItem('authUser', this.getCurrentUsername());
+
         };
     }
-
 
 
     alertName = () => {

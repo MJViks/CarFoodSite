@@ -42,7 +42,7 @@ const Login = (props) => {
                     <Button color="success" onClick={login}>
                         Войти
                     </Button>
-                    <Button color="secondary" onClick={toggle}>
+                    <Button color="secondary" onClick={logout}>
                         Отмена
                     </Button>
                 </ModalFooter>
@@ -57,6 +57,7 @@ const Login = (props) => {
 
     function logout() {
          firebase.logout().then(toggle()).catch(err => alert(err.message));
+         setName(null);
     }
 }
 
