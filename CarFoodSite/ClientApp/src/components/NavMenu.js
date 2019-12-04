@@ -11,7 +11,6 @@ export class NavMenu extends Component {
 
     constructor(props) {
         super(props);
-
         firebase.getStateuser(this.setName);
 
         this.toggleNavbar = this.toggleNavbar.bind(this);
@@ -34,9 +33,18 @@ export class NavMenu extends Component {
                 <Alert className="m-2 py-0 " color="warning">
                     {this.state.name}
                 </Alert>
-                <Button className="m-2" color="outline-warning" onClick={() => { this.toggleNavbarClose(); firebase.logout() }}>Выход</Button>
+                <Button className="m-2" color="outline-warning" onClick={() => { this.toggleNavbarClose(); this.logOut() }}>
+                    Выход
+                </Button>
             </NavItem>
         );
+    }
+
+    logOut = async() => {
+         if (window.confirm(`Вы уверены?`))
+            await firebase.logout().catch(err => alert(err.message));
+            this.setName(null);
+        
     }
 
     toggleNavbar() {

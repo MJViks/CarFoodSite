@@ -42,7 +42,7 @@ const Login = (props) => {
                     <Button color="success" onClick={login}>
                         Войти
                     </Button>
-                    <Button color="secondary" onClick={logout}>
+                    <Button color="secondary" onClick={toggle}>
                         Отмена
                     </Button>
                 </ModalFooter>
@@ -55,10 +55,7 @@ const Login = (props) => {
         setName(firebase.getCurrentUsername());
     }
 
-    function logout() {
-         firebase.logout().then(toggle()).catch(err => alert(err.message));
-         setName(null);
-    }
+    
 }
 
 export default Login;

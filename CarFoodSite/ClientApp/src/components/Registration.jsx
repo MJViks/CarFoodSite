@@ -15,6 +15,7 @@ const Registration = (props) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [chPassword, setChPassword] = useState('');
   
 
     return (
@@ -48,7 +49,7 @@ const Registration = (props) => {
                             <Label for="regPasswordCh">
                                 Повторите пароль
                             </Label>
-                            <Input type="password" id="regPasswordCh" placeholder="A-Z a-z 0-9" />
+                            <Input type="password" id="chPasswordCh" value={chPassword} onChange={e => setChPassword(e.target.value)} placeholder="A-Z a-z 0-9" />
                         </FormGroup>
                     </Form>
                 </ModalBody>
@@ -65,7 +66,16 @@ const Registration = (props) => {
     );
 
     async function onRegister() {
-        await firebase.register(name, email, password).then(toggle()).catch(err => alert(err.message));
+        if (name === '' || password === '' || chPassword === '' || email === '') {
+            alert('Не все поля заполнены!');
+        }else if (password !== chPassword) {
+            alert('Пароли не совподают!');
+        } else if (name.length < 3) {
+            alert('Имя слишком короткое! \n Минимум 3 символа!');
+        } else {
+            await firebase.register(name, email, password).then(toggle()).catch(err => alert(err.message));
+        }
+
     }
 }
 

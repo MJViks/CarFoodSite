@@ -1,11 +1,42 @@
 ﻿import React, { Component } from 'react';
 import {
-    Col, Row, Button, Form, FormGroup, Label, Input, Container, Card, CardHeader, CardFooter, CardBody,
+    Col, Row, Button, FormGroup, Label, Input, Container, Card, CardHeader, CardFooter, CardBody,
     CardText
 } from 'reactstrap';
+import firebase from "../firebase"
 
 export class Feedback extends Component {
     static displayName = Feedback.name;
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            text: "",
+            select: "Замечательно",
+            names: [],
+            emails: [],
+            texts: [],
+            colors: [],
+        };
+
+        firebase.readFeedback().then(() => {
+            const JSONFeedback = JSON.parse(firebase.feedback)
+            let names = []
+            let emails = []
+            let texts = []
+            let colors = []
+            for (let users in JSONFeedback) {
+                names.unshift(users)
+                emails.unshift(JSONFeedback[users]['email'])
+                texts.unshift(JSONFeedback[users]['text'])
+                colors.unshift(JSONFeedback[users]['select'])
+            }
+            this.setState({ names: names, emails: emails, texts: texts, colors: colors })
+        })
+    }
+
+
 
     render() {
         return (
@@ -18,40 +49,27 @@ export class Feedback extends Component {
                             </h2>
                             <hr className="divider light my-4" />
 
-                            <Form className="text-white-75 ">
+                            <Container className="text-white-75 ">
                                 <Row form>
-                                    <Col md={6}>
-                                        <FormGroup>
-                                            <Label for="exampleName">Имя</Label>
-                                            <Input type="Name" placeholder="Вася" name="name" id="ibName" />
-                                        </FormGroup>
-                                    </Col>
-                                    <Col md={6}>
-                                        <FormGroup>
-                                            <Label for="exampleEmail">Email</Label>
-                                            <Input type="email" name="email" id="ibEmail" placeholder="@" />
-                                        </FormGroup>
-                                    </Col>
-
                                     <Col className="h-100">
                                         <FormGroup >
                                             <Label for="exampleText">Отзыв</Label>
-                                            <Input type="textarea" className="h-130-px" placeholder="Очень супер! Очень пупер!" name="text" id="ibText" />
+                                            <Input type="textarea" className="h-130-px" placeholder="Очень супер! Очень пупер!" id="ibText" onChange={e => this.setState({ text: e.target.value })} />
                                         </FormGroup>
                                     </Col>
                                 </Row>
                                 <Row>
                                     <Col>
                                         <legend>Оцените нас</legend>
-                                        <Input type="select" name="select" id="ibSelect">
+                                        <Input type="select" name="select" id="ibSelect" onChange={e => this.setState({ select: e.target.value })}>
                                             <option>Замечательно</option>
                                             <option>Норм</option>
                                             <option disabled>Ужас..</option>
                                         </Input>
                                     </Col>
                                 </Row>
-                                <Button className="btn-info btn-lg mt-4">Отправить</Button>
-                            </Form>
+                                <Button className="btn-info btn-lg mt-4" onClick={this.sendFeedback}>Отправить</Button>
+                            </Container>
                         </div>
                     </div>
                 </div>
@@ -63,22 +81,48 @@ export class Feedback extends Component {
                     <Container >
                         <Row >
 
-
-                            <Col sm="4" className="pt-3">
-                                <Card>
-                                    <CardHeader>Имя</CardHeader>
-                                    <CardBody>
-                                        <CardText>With supporting text below as a natural lead-in to additional content.</CardText>
-                                    </CardBody>
-                                    <CardFooter>Email</CardFooter>
-                                </Card>
-                            </Col>
-
-
+                            {this.state.names.map((name, i) =>
+                                <Col sm="4" className="pt-3">
+                                    <Card>
+                                        <CardHeader>
+                                            {name}
+                                        </CardHeader>
+                                        <CardBody>
+                                            <CardText>
+                                                {this.state.texts[i]}
+                                            </CardText>
+                                        </CardBody>
+                                        <CardFooter className="feedback-medium">
+                                            {this.state.emails[i]}
+                                        </CardFooter>
+                                    </Card>
+                                </Col>
+                            )}
                         </Row>
                     </Container>
                 </div>
             </div>
         );
     }
+
+    swichColorFeedback = (select) => {
+        alert(select)
+        switch (select) {
+            case 'Норм': return "feedback-medium"
+            case 'Замечательно': return "feedback-high"
+            case 'Ужас..': return "feedback-low"
+            default: return ''
+        }
+    }
+
+    sendFeedback = async () => {
+        if (!firebase.getCurrentUsername())
+            alert('Отзывы могут оставлять лишь зарегестрированные пользователи!');
+        else if (!this.state.text)
+            alert('Отзыв не может быть пустым!');
+        else {
+            firebase.writeFeedback(this.state.text, this.state.select);
+        }
+    }
+
 }

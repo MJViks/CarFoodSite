@@ -200,6 +200,15 @@ pre {
 figure {
     margin: 0 0 1rem;
 }
+.feedback-medium{
+    background-color: #7dd3d6;
+}
+.feedback-high{
+    background-color: #7dd6a2;
+}
+.feedback-low{
+    background-color: #d67d7d;
+}
 
 img {
     vertical-align: middle;

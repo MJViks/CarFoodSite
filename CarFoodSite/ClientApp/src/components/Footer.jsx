@@ -5,10 +5,10 @@ export class Footer extends Component {
 
     render() {
         return (
-            <footer class="bg-light py-5">
-                <div class="container">
-                    <div class="small text-center text-muted">MIT License</div>
-                    <div class="small text-center text-muted">2019 - MJ_Viks</div>
+            <footer className="bg-light py-5">
+                <div className="container">
+                    <div className="small text-center text-muted">MIT License</div>
+                    <div className="small text-center text-muted">2019 - MJ_Viks</div>
                 </div>
             </footer>
         );
