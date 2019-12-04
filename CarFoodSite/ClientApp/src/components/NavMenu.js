@@ -20,7 +20,7 @@ export class NavMenu extends Component {
             login: false,
             navWhite: false,
             name: null
-                //localStorage.getItem('authUser')
+            //localStorage.getItem('authUser')
             //localStorage.setItem('authUser', this.getCurrentUsername());
 
         };
@@ -40,11 +40,11 @@ export class NavMenu extends Component {
         );
     }
 
-    logOut = async() => {
-         if (window.confirm(`Вы уверены?`))
+    logOut = async () => {
+        if (window.confirm(`Вы уверены?`))
             await firebase.logout().catch(err => alert(err.message));
-            this.setName(null);
-        
+        this.setName(null);
+
     }
 
     toggleNavbar() {
@@ -58,6 +58,8 @@ export class NavMenu extends Component {
             this.setState({
                 collapsed: true
             });
+        window.scroll(0, 0);
+
     }
 
 
