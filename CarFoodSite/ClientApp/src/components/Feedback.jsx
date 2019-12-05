@@ -9,8 +9,8 @@ export class Feedback extends Component {
     static displayName = Feedback.name;
 
     constructor(props) {
-        super(props);
-
+        super(props)
+        this.fillFeedback()
         this.state = {
             text: "",
             select: "Замечательно",
@@ -19,8 +19,11 @@ export class Feedback extends Component {
             texts: [],
             colors: [],
         };
+    }
 
-        firebase.readFeedback().then(() => {
+
+    fillFeedback = async () => {
+        await firebase.readFeedback().then(() => {
             const JSONFeedback = JSON.parse(firebase.feedback)
             let names = []
             let emails = []
@@ -35,8 +38,6 @@ export class Feedback extends Component {
             this.setState({ names: names, emails: emails, texts: texts, colors: colors })
         })
     }
-
-
 
     render() {
         return (
@@ -122,6 +123,7 @@ export class Feedback extends Component {
             alert('Отзыв не может быть пустым!');
         else {
             firebase.writeFeedback(this.state.text, this.state.select);
+            this.fillFeedback();
         }
     }
 

@@ -74,7 +74,7 @@ class Firebase {
             email: this.auth.currentUser.email,
             text: text,
             select: select
-        }).then(() => alert('Спасибо за ваш отзыв)'));
+        }).then(() => alert('Спасибо за ваш отзыв)')).catch(err => console.log(err.message));
     }
 }
 
