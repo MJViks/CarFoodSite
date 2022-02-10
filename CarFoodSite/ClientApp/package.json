@@ -28,7 +28,7 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.17.0",
     "gulp-sass": "^4.0.2",
-    "node-sass": "^4.13.0",
+    "node-sass": "^7.0.0",
     "typescript": "^3.7.3"
   },
   "eslintConfig": {
